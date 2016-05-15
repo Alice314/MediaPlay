@@ -7,7 +7,7 @@ import java.util.List;
  */
 public class Status {
     private String showapi_res_code,showapi_res_error,showapi_res_body,pagebean,
-            song_begin;
+            cur_song_num;
     private List<songlist>mSonglists;
 
     public String getShowapi_res_code(){
@@ -34,11 +34,11 @@ public class Status {
     public void setpagebean(String pagebean){
         this.pagebean = pagebean;
     }
-    public String getsong_begin(){
-        return song_begin;
+    public String getcur_song_num(){
+        return cur_song_num;
     }
-    public void setsong_begin(String song_begin){
-        this.song_begin = song_begin;
+    public void setcur_song_num(String cur_song_num){
+        this.cur_song_num = cur_song_num;
     }
     public List<songlist>getSonglists(){
         return mSonglists;
@@ -51,11 +51,12 @@ public class Status {
     public String toString() {
         return "Status [showapi_res_code=" + showapi_res_code+",showapi_res_error=" +
                 showapi_res_error + ",showapi_res_body=" + showapi_res_body + ",pagebean=" +
-                pagebean + ",song_begin=" + song_begin + ",mSonglists=" + mSonglists + "]";
+                pagebean + ",cur_song_num=" + cur_song_num + ",mSonglists=" + mSonglists + "]";
     }
 
     public class songlist {
-        private String albumid,albummid,singerid,songid;
+        private String albumid;
+        private String albummid;
         private String albumpic_big;
         private String albumpic_small;
         private String downUrl;
@@ -63,7 +64,40 @@ public class Status {
         private String singername;
         private String songname;
         private String seconds;
+        private String singerid;
+        private String songid;
 
+        public String getSongid() {
+            return songid;
+        }
+
+        public void setSongid(String songid) {
+            this.songid = songid;
+        }
+
+        public String getAlbummid() {
+            return albummid;
+        }
+
+        public String getSingerid() {
+            return singerid;
+        }
+
+        public void setAlbummid(String albummid) {
+            this.albummid = albummid;
+        }
+
+        public void setSingerid(String singerid) {
+            this.singerid = singerid;
+        }
+
+        public String getAlbumid() {
+            return albumid;
+        }
+
+        public void setAlbumid(String albumid) {
+            this.albumid = albumid;
+        }
 
         public String getAlbumpic_big() {
             return albumpic_big;
@@ -121,45 +155,12 @@ public class Status {
             this.url = url;
         }
 
-        public String getAlbumid() {
-            return albumid;
-        }
-
-        public String getAlbummid() {
-            return albummid;
-        }
-
-        public String getSingerid() {
-            return singerid;
-        }
-
-        public String getSongid() {
-            return songid;
-        }
-
-        public void setAlbumid(String albumid) {
-            this.albumid = albumid;
-        }
-
-        public void setAlbummid(String albummid) {
-            this.albummid = albummid;
-        }
-
-        public void setSingerid(String singerid) {
-            this.singerid = singerid;
-        }
-
-        public void setSongid(String songid) {
-            this.songid = songid;
-        }
-
-
         @Override
         public String toString() {
-            return "songlist [_albumid=" + albumid +",albumid="+albumid+",albumpic_big="
-                    + albumpic_big+",albumpic_small="+albumpic_small+",downUrl="+
-                    downUrl+",seconds="+seconds+",singerid="+singerid+",singername="+
-                    singername+",songid="+songid+",songname="+songname+",url="+url+"]";
+            return "songlist [albumid="+albumid+",albummid="+albummid+",albumpic_big="+
+                    albumpic_big+",albumpic_small="+albumpic_small+",downUrl="+downUrl+
+                    ",seconds="+seconds+",singerid="+singerid+",singername="+singername+
+                    ",songid="+songid+",songname="+songname+",url="+url+"]";
         }
     }
 }

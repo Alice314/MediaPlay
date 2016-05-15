@@ -1,4 +1,4 @@
-package com.wusui.mediaplay.ui.fragment;
+package com.wusui.mediaplay.callback;
 
 import android.support.v7.widget.RecyclerView;
 

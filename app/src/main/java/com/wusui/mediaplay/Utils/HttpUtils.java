@@ -16,6 +16,7 @@ import java.net.URL;
  */
 public class HttpUtils {
 
+
     public static void sendHttpRequestForBitmap(final String address, final HttpForBitmapListener listener) {
         new Thread(new Runnable() {
             @Override
@@ -36,7 +37,7 @@ public class HttpUtils {
                         if (listener != null) {
                             if (bitmap != null) {
 
-                               listener.onFinish(bitmap);
+                                listener.onFinish(bitmap);
                             } else {
                                 listener.onError("bitmap is null");
                             }
@@ -57,6 +58,7 @@ public class HttpUtils {
     }
 
     public static void sendHttpRequest(final String address, final HttpCallbackListener listener) {//为这个方法传入了两个参数：地址和监听设置
+
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -106,16 +108,7 @@ public class HttpUtils {
 
         void onFinish(InputStream inputStream);
     }
-    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
-        final int height = options.outHeight;
-        final int width = options.outWidth;
-        int inSampleSize = 1;
-        if (height > reqHeight || width > reqWidth) {
-            final int heightRatio = Math.round((float) height / (float) reqHeight);
-            final int widthRatio = Math.round((float) width / (float) reqWidth);
-            inSampleSize = heightRatio < widthRatio ? heightRatio : widthRatio;
-        }
-        return inSampleSize;
-    }
+
+
 }
 

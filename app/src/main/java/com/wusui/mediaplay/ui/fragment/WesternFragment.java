@@ -16,10 +16,10 @@ public class WesternFragment extends android.support.v4.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance){
         super.onCreateView(inflater, container, savedInstance);
-        View communityView = inflater.inflate(R.layout.fragment, container,false);
-        mRecyclerView = (RecyclerView)communityView.findViewById(R.id.id_recyclerView);
+        View WesternView = inflater.inflate(R.layout.fragment_western, container,false);
 
-        return communityView;
+
+        return WesternView;
 
     }
 }

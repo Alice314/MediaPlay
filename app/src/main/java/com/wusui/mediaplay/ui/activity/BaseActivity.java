@@ -1,50 +1,62 @@
 package com.wusui.mediaplay.ui.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.view.ViewPager;
+import android.os.Handler;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import com.wusui.mediaplay.R;
-import com.wusui.mediaplay.ui.adapter.MyFragmentPagerAdapter;
 
 /**
- * Created by fg on 2016/5/14.
+ * Created by Stormouble on 16/5/1.
  */
-public class BaseActivity extends AppCompatActivity{
+public class BaseActivity extends AppCompatActivity {
+
+    private static final int NAVDRAWER_LAUNCH_DELAY = 250;
+
 
     private Toolbar mToolbar;
-    private ViewPager mViewPager;
-    private MyFragmentPagerAdapter mPagerAdapter;
-    private TabLayout mTabLayout;
+    private Handler mHandler;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        initToolBar();
-        initTabLayout();
+        mHandler = new Handler();
 
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
     }
 
-    private void initTabLayout() {
-        mPagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), this);
-        mViewPager = (ViewPager) findViewById(R.id.vPager);
-        mViewPager.setAdapter(mPagerAdapter);
-        mTabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
-        mTabLayout.setupWithViewPager(mViewPager);
-        mTabLayout.setTabMode(TabLayout.MODE_FIXED);
+    @Override
+    public void setContentView(@LayoutRes int layoutResID) {
+        super.setContentView(layoutResID);
+        getToolbar();
     }
 
-    private void initToolBar() {
-        mToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
-        mToolbar.setTitle("Backdrops");
-        mToolbar.setTitleTextColor(getResources().getColor(R.color.white));
-        setSupportActionBar(mToolbar);
+    protected Toolbar getToolbar() {
+        if (mToolbar == null) {
+            mToolbar = (Toolbar) findViewById(R.id.toolbar);
+            if (mToolbar != null) {
+                setSupportActionBar(mToolbar);
+            }
+        }
+        return mToolbar;
     }
 }
-
-
