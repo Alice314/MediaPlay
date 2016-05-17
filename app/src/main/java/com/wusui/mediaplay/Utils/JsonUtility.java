@@ -3,8 +3,15 @@ package com.wusui.mediaplay.Utils;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.wusui.mediaplay.model.Song;
 import com.wusui.mediaplay.model.Status;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,20 +20,30 @@ import java.util.List;
  */
 public class JsonUtility {
 
-    private static List<String> urlList = new ArrayList<>();
-    private static Status fromJson;
-    private static List<Status.songlist> sSonglists;
-    public static List<String> handlePictureResponse(String response){
+    public static List<Song> handlePictureResponse(String response) {
+        Log.e("handlePictureResponse", response);
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONObject("showapi_res_body").
+                    getJSONObject("pagebean").getJSONArray("songlist");
+            Gson gson = new Gson();
+            List<Song> songs = new ArrayList<>();
+            songs = gson.fromJson(jsonArray.toString(), new TypeToken<List<Song>>() {
+            }.getType());
 
-        Gson gson = new Gson();
-        fromJson = gson.fromJson(response,Status.class);
-        sSonglists = fromJson.getSonglists();
-        Log.e("Utility.class","解析成功");
-        for (int i = 0; i < sSonglists.size(); i++) {
-            Log.e("Utility.class","THIS IS URL="+ sSonglists.get(i).getAlbumpic_small());
-            urlList.add(sSonglists.get(i).getAlbumpic_small());
+            for (Song s:songs) {
+                if (s.getSongname() != null)
+                Log.e("handlePictureResponse",s.getSongname());
+            }
+            Log.e ("JsonUtility", jsonArray.toString());
+            return songs;
+        }catch (JSONException e)
+        {
+            Log.e("dddddddddddddddd", "解析出错");
+            e.printStackTrace();
         }
-        return urlList;
+        return null;
+
     }
 
 }

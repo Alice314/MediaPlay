@@ -17,6 +17,7 @@ import com.wusui.mediaplay.R;
 import com.wusui.mediaplay.Utils.FileUtils;
 import com.wusui.mediaplay.Utils.HttpUtils;
 import com.wusui.mediaplay.Utils.JsonUtility;
+import com.wusui.mediaplay.model.Song;
 import com.wusui.mediaplay.ui.activity.PlayActivity;
 import com.wusui.mediaplay.ui.adapter.MusicAdapter;
 
@@ -35,6 +36,7 @@ public class InlandFragment extends Fragment {
     private List<String>mSingerName = new ArrayList<>();
     private static List<String>mSongName = new ArrayList<>();
     private Context mContext;
+    private List<Song> mSongs = new ArrayList<>();
 
 
     public static final int LOAD_SUCCESS = 1;
@@ -95,18 +97,25 @@ public class InlandFragment extends Fragment {
     private void initView() {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        requestMusicJson();
+
         mRecyclerView.setLayoutManager(linearLayoutManager);
-
-        mRecyclerView.setAdapter(mAdapter = new MusicAdapter(mContext, mSmallBitmaps));//, mSongName, mSingerName));
-
+        mAdapter = new MusicAdapter(getActivity(),mSongs,mRecyclerView);
         mAdapter.setmOnItemClickListener(new MusicAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(getContext(), PlayActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("Song",mSongs.get(position));
+                intent.putExtras(bundle);
                 startActivity(intent);
             }
         });
+
+        mRecyclerView.setAdapter(mAdapter);//, mSongName, mSingerName));
+
+
+
+        requestMusicJson();
     }
 
     private void requestMusicJson() {
@@ -115,9 +124,8 @@ public class InlandFragment extends Fragment {
         HttpUtils.sendHttpRequest(url, new HttpUtils.HttpCallbackListener() {
             @Override
             public void onFinish(String response) {
-                mHandler.sendEmptyMessage(LOAD_SUCCESS);
-                requestMusicsPics(response);
                 Log.e("InlandFragment.class","请求地址没问题");
+                requestMusicsPics(response);
             }
 
             @Override
@@ -131,9 +139,14 @@ public class InlandFragment extends Fragment {
     }
 
     private void requestMusicsPics(String response) {
-        picUrls = JsonUtility.handlePictureResponse(response);
+        Log.e("requestMusicsPics",response);
+
+       // picUrls = JsonUtility.handlePictureResponse(response);
        // picUrls = picUrls.get(0);
-        for (int i = 0; i < picUrls.size(); i++) {
+        if (JsonUtility.handlePictureResponse(response) != null)
+            mSongs.addAll(JsonUtility.handlePictureResponse(response));
+        mHandler.sendEmptyMessage(LOAD_SUCCESS);
+       /* for (int i = 0; i < picUrls.size(); i++) {
             Message message = Message.obtain();
             message.obj = null;
             message.what = LOAD_BITMAP;
@@ -142,7 +155,7 @@ public class InlandFragment extends Fragment {
             getMusicPic(i);
             Log.e("InlandFragment.class","请求多张没问题");
 
-        }
+        }*/
     }
 
     private void requestMusicPic(String musicPicUrl, final int position) {
