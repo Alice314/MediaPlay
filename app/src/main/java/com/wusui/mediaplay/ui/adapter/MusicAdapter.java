@@ -2,6 +2,7 @@ package com.wusui.mediaplay.ui.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,70 +11,67 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wusui.mediaplay.R;
+import com.wusui.mediaplay.Utils.ImageLoader;
+import com.wusui.mediaplay.model.Song;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 /**
  * Created by fg on 2016/5/14.
  */
 public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MyViewHolder> {
-    private Context mContext;
+    // private Context mContext;
    // private List<String>mSongName;
     //private List<String>mSingerName;
-    private List<Bitmap> mSmallBitmaps = new ArrayList<>();
+   // private List<Bitmap> mSmallBitmaps = new ArrayList<>();
 
-    public MusicAdapter(Context context, List<Bitmap>smallbitmaps){//},List<String>mSongName, List<String>mSingerName){
-        mContext = context;
-        mSmallBitmaps = smallbitmaps;
+    private  List<Song> mSongs = new ArrayList<>();
+    private ImageLoader mImageLoader;
+
+    public MusicAdapter(Context context, List<Song>songs,RecyclerView recyclerView){//},List<String>mSongName, List<String>mSingerName){
+
+        //mSmallBitmaps = smallbitmaps;
+        mSongs = songs;
+        this.mImageLoader = new ImageLoader(context,recyclerView);
+
       //  this.mSongName = mSongName;
         //this.mSingerName = mSingerName;
     }
     @Override
     public MusicAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_image,parent,false));
+        return new MyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_image,parent,false));
     }
 
     @Override
     public void onBindViewHolder(final MusicAdapter.MyViewHolder holder, int position) {
-
-        if (mSmallBitmaps.get(position) != null) {
-            holder.mImageView.setImageBitmap(mSmallBitmaps.get(position));
-        } else {
-
-            holder.mImageView.setImageResource(R.mipmap.ic_launcher);
+        holder.mImageView.setImageResource(R.mipmap.ic_launcher);
+        if (mSongs.get(position).getSingername() != null) {
+            holder.mSingerText.setText(mSongs.get(position).getSingername());
         }
-        /*if (mSingerName.get(position)!=null && mSongName != null) {
+        if (mSongs.get(position).getSongname() != null){
+            holder.mSongText.setText(mSongs.get(position).getSongname());
+        }
+        if (mSongs.get(position).getAlbumpic_small() != null){
+            mImageLoader.displayImage(mSongs.get(position).getAlbumpic_small(),holder.mImageView);
+        }
 
-            for (int j = 0;j < mSongName.size();j++){
-                String song;
-                song = mSongName.get(j);
-                holder.mSongText.setText(song);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int pos = holder.getLayoutPosition();
+                mOnItemClickListener.onItemClick(holder.itemView,pos);
             }
-            for (int k = 0;k < mSingerName.size();k++){
-                String singer;
-                singer = mSingerName.get(k);
-                holder.mSingerText.setText(singer);
-            }
+        });
 
-        } else {*/
-            holder.mSongText.setText("未知歌名");
-            holder.mSingerText.setText("未知歌手");
-
-        /*if (mOnItemClickListener != null){
-            holder.mImageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int pos = holder.getLayoutPosition();
-                    mOnItemClickListener.onItemClick(holder.mImageView,pos);
-                }
-            });
-        }*/
     }
 
     @Override
     public int getItemCount() {
-        return mSmallBitmaps.size();
+        return mSongs.size();
     }
 
 

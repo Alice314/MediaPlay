@@ -3,6 +3,7 @@ package com.wusui.mediaplay.Utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -75,6 +76,7 @@ public class HttpUtils {
                         StringBuilder response = new StringBuilder();
                         String line;
                         while ((line = reader.readLine()) != null) {
+                            Log.e("aaaaaaaaaaaa",line);
                             response.append(line);
                         }
                         if (listener != null) {
