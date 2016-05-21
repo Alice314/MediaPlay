@@ -5,13 +5,11 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wusui.mediaplay.model.Song;
-import com.wusui.mediaplay.model.Status;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +30,7 @@ public class JsonUtility {
             }.getType());
 
             for (Song s:songs) {
+
                 if (s.getSongname() != null)
                 Log.e("handlePictureResponse",s.getSongname());
             }

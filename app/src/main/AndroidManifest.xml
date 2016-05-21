@@ -16,6 +16,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.activity.PlayActivity"/>
+        <service android:name=".ui.service.DownloadService"/>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

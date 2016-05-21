@@ -5,8 +5,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v4.util.LruCache;
@@ -15,6 +13,8 @@ import android.widget.ImageView;
 
 import com.jakewharton.disklrucache.DiskLruCache;
 import com.wusui.mediaplay.R;
+import com.wusui.mediaplay.ui.activity.MainActivity;
+import com.wusui.mediaplay.ui.activity.PlayActivity;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -23,7 +23,6 @@ import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.MessageDigest;
@@ -41,6 +40,7 @@ public class ImageLoader {
     private DiskLruCache mDiskLruCache;
     private Set<BitmapWorkerTask> taskCollection = new HashSet<BitmapWorkerTask>();  ;
     private RecyclerView mRecyclerView;
+    private ImageView mImageView;
 
 
     public ImageLoader(Context context,RecyclerView mRecyclerView) {
@@ -55,6 +55,7 @@ public class ImageLoader {
                 return bitmap.getByteCount();
             }
         };
+
         try {
             // 获取图片缓存路径
             File cacheDir = getDiskCacheDir(context, "thumb");
@@ -69,7 +70,29 @@ public class ImageLoader {
         }
     }
 
+    public ImageLoader(Context context, ImageView mImageView) {
+        this.context = context;
+        this.mImageView = mImageView;
+        int maxMemory = (int) Runtime.getRuntime().maxMemory();
+        int cacheSize = maxMemory / 8;
+        mMemoryCache = new LruCache<String, Bitmap>(cacheSize) {
+            @Override
+            protected int sizeOf(String key, Bitmap bitmap) {
+                return bitmap.getByteCount();
+            }
+        };
 
+        try {
+            File cacheDir = getDiskCacheDir(context, "thumb");
+            if (!cacheDir.exists()) {
+                cacheDir.mkdirs();
+            }
+            mDiskLruCache = DiskLruCache
+                    .open(cacheDir, getAppVersion(context), 1, 10 * 1024 * 1024);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     public void displayImage(final String imageUrl, final ImageView imageView) {
         imageView.setTag(imageUrl);
         imageView.setImageResource(R.mipmap.ic_launcher);
@@ -173,9 +196,15 @@ public class ImageLoader {
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
             // 根据Tag找到相应的ImageView控件，将下载好的图片显示出来。
+            if (context instanceof MainActivity){
             ImageView imageView = (ImageView) mRecyclerView.findViewWithTag(imageUrl);
             if (imageView != null && bitmap != null) {
                 imageView.setImageBitmap(bitmap);
+            }
+            }else if(context instanceof PlayActivity){
+                if (mImageView != null && bitmap != null) {
+                    mImageView.setImageBitmap(bitmap);
+                }
             }
             taskCollection.remove(this);
         }
@@ -286,6 +315,7 @@ public class ImageLoader {
             cachePath = context.getExternalCacheDir().getPath();
         } else {
             cachePath = context.getCacheDir().getPath();
+
         }
         return new File(cachePath + File.separator + uniqueName);
     }

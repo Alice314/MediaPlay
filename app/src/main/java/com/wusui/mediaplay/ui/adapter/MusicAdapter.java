@@ -1,8 +1,6 @@
 package com.wusui.mediaplay.ui.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,31 +13,21 @@ import com.wusui.mediaplay.Utils.ImageLoader;
 import com.wusui.mediaplay.model.Song;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 /**
  * Created by fg on 2016/5/14.
  */
 public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MyViewHolder> {
-    // private Context mContext;
-   // private List<String>mSongName;
-    //private List<String>mSingerName;
-   // private List<Bitmap> mSmallBitmaps = new ArrayList<>();
 
     private  List<Song> mSongs = new ArrayList<>();
     private ImageLoader mImageLoader;
 
     public MusicAdapter(Context context, List<Song>songs,RecyclerView recyclerView){//},List<String>mSongName, List<String>mSingerName){
 
-        //mSmallBitmaps = smallbitmaps;
         mSongs = songs;
         this.mImageLoader = new ImageLoader(context,recyclerView);
 
-      //  this.mSongName = mSongName;
-        //this.mSingerName = mSingerName;
     }
     @Override
     public MusicAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

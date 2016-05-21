@@ -35,9 +35,8 @@ public class InlandFragment extends Fragment {
     private static List<Bitmap> mSmallBitmaps = new ArrayList<>();
     private List<String>mSingerName = new ArrayList<>();
     private static List<String>mSongName = new ArrayList<>();
-    private Context mContext;
     private List<Song> mSongs = new ArrayList<>();
-
+    private Context mContext;
 
     public static final int LOAD_SUCCESS = 1;
     public static final int LOAD_ERROR = -1;
@@ -111,10 +110,7 @@ public class InlandFragment extends Fragment {
             }
         });
 
-        mRecyclerView.setAdapter(mAdapter);//, mSongName, mSingerName));
-
-
-
+        mRecyclerView.setAdapter(mAdapter);
         requestMusicJson();
     }
 
@@ -140,22 +136,10 @@ public class InlandFragment extends Fragment {
 
     private void requestMusicsPics(String response) {
         Log.e("requestMusicsPics",response);
-
-       // picUrls = JsonUtility.handlePictureResponse(response);
-       // picUrls = picUrls.get(0);
         if (JsonUtility.handlePictureResponse(response) != null)
             mSongs.addAll(JsonUtility.handlePictureResponse(response));
         mHandler.sendEmptyMessage(LOAD_SUCCESS);
-       /* for (int i = 0; i < picUrls.size(); i++) {
-            Message message = Message.obtain();
-            message.obj = null;
-            message.what = LOAD_BITMAP;
-            message.arg1 = -1;
-            mHandler.sendMessage(message);
-            getMusicPic(i);
-            Log.e("InlandFragment.class","请求多张没问题");
 
-        }*/
     }
 
     private void requestMusicPic(String musicPicUrl, final int position) {
@@ -205,28 +189,5 @@ public class InlandFragment extends Fragment {
         });
     }
 
-    private void getMusicPic(final int position) {
-        FileUtils.getFile(FILE_NAME + "_" + position + FILE_NAME_END, new FileUtils.GetImageListener() {
-            @Override
-            public void onSuccess(Bitmap bitmap) {
-                Message message = Message.obtain();
-                message.obj = null;
-                message.what = LOAD_BITMAP;
-                message.arg1 = -1;
-                mHandler.sendMessage(message);
-                Log.e("InlandFragment.class","从文件里面拿图片没问题");
-
-            }
-
-            @Override
-            public void onFail() {
-                Message message = Message.obtain();
-                message.what = LOAD_ERROR;
-                message.obj = "第" + position + "张图片获取失败，开始下载";
-                mHandler.sendMessage(message);
-                requestMusicPic(picUrls.get(position), position);
-            }
-        });
-    }
 
 }
