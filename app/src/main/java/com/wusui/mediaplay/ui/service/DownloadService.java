@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.os.ResultReceiver;
+import android.util.Log;
 
 import com.wusui.mediaplay.model.Song;
 
@@ -47,6 +48,7 @@ public class DownloadService extends IntentService {
             if(!file.exists())
                 file.createNewFile();
             OutputStream outputStream = new FileOutputStream(file);
+            Log.e("DownloadService","下载数据应该没问题咯");
             byte data[]=new byte[1024];
             long total =0;
             int count;

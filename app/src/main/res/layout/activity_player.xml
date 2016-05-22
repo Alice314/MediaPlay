@@ -45,13 +45,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <Button
+       <!-- <Button
             android:id="@+id/loop"
             android:layout_width="0dp"
             android:layout_weight="140"
             android:layout_height="wrap_content"
             android:background="@drawable/ic_loop_white_18dp"
-            />
+            />-->
+        <Button
+            android:id="@+id/pause"
+            android:layout_width="0dp"
+            android:layout_weight="70"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_pause_circle_outline_white_24dp"
+           />
         <Button
             android:id="@+id/previous"
             android:layout_width="0dp"

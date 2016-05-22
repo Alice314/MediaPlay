@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.wusui.mediaplay.R;
 import com.wusui.mediaplay.Utils.ImageLoader;
@@ -32,7 +33,7 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener {
     private static Button mPlay;
     private ImageView mImageView;
     private ProgressDialog mProgressDialog;
-    private
+    private static Button mPause;
 
     MediaPlayer.OnPreparedListener mPreparedListener = new MediaPlayer.OnPreparedListener() {
 
@@ -100,12 +101,14 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener {
 
     private void initButton() {
         mPlay = (Button) findViewById(R.id.play);
+        mPause = (Button)findViewById(R.id.pause);
        Button mPrevious = (Button) findViewById(R.id.previous);
        Button mNext = (Button) findViewById(R.id.next);
        Button mLoop = (Button) findViewById(R.id.loop);
        Button mList = (Button) findViewById(R.id.list);
 
         mPlay.setOnClickListener(this);
+        mPause.setOnClickListener(this);
         mPrevious.setOnClickListener(this);
         mNext.setOnClickListener(this);
         mLoop.setOnClickListener(this);
@@ -122,11 +125,11 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener {
             case R.id.play:
                 if (isPrepared)
                     mediaPlayer.start();
-               // mPlay.setBackgroundResource(R.drawable.ic_pause_circle_outline_white_24dp);
                 break;
-
-            case R.id.previous:
+            case R.id.pause:
                 mediaPlayer.pause();
+            case R.id.previous:
+
                 break;
             case R.id.next:
 
@@ -168,6 +171,7 @@ public class PlayActivity extends BaseActivity implements View.OnClickListener {
             mProgressDialog.setProgress(progress);
             if (progress == 100){
                 mProgressDialog.dismiss();
+                Toast.makeText(PlayActivity.this,mSong.getSongname()+"下载成功",Toast.LENGTH_SHORT).show();
             }
         }
     }
